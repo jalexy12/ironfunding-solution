@@ -15,8 +15,6 @@ const mongoose           = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/ironfunds-development');
 
-const users = require('./routes/users');
-
 const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
