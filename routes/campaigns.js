@@ -1,6 +1,5 @@
 const express                = require('express');
 const moment                 = require('moment');
-const isLoggedIn             = require('../utils/is-logged-in');
 const Campaign               = require('../models/campaign');
 const TYPES                  = require('../models/campaign-types');
 const { ensureLoggedIn }     = require('connect-ensure-login');
@@ -9,7 +8,7 @@ const {
   checkOwnership
   }                          = require('../middleware/campaign-middleware');
 const router  = express.Router();
-router.use(isLoggedIn);
+
 
 router.get('/new', ensureLoggedIn('/login'), (req, res, next) => {
   res.render('campaigns/new', { types: TYPES });
