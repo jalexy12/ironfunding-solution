@@ -18,7 +18,6 @@ mongoose.connect('mongodb://localhost:27017/ironfunds-development');
 const users = require('./routes/users');
 
 const app = express();
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('layout', 'layouts/main-layout');
@@ -61,7 +60,6 @@ passport.use('local-login', new LocalStrategy((username, password, next) => {
 passport.use('local-signup', new LocalStrategy(
   { passReqToCallback: true },
   (req, username, password, next) => {
-    // To avoid race conditions
     process.nextTick(() => {
         User.findOne({
             'username': username
@@ -71,7 +69,6 @@ passport.use('local-signup', new LocalStrategy(
             if (user) {
                 return next(null, false);
             } else {
-                // Destructure the body
                 const { username, email, description, password } = req.body;
                 const hashPass = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
                 const newUser = new User({
@@ -93,8 +90,6 @@ passport.use('local-signup', new LocalStrategy(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -114,7 +109,6 @@ app.use( (req, res, next) => {
 const index = require('./routes/index');
 const campaignRoutes = require('./routes/campaigns');
 const rewardRoutes   = require('./routes/rewards');
-// already mounted
 const authRoutes = require('./routes/authentication')
 
 app.use('/', index);
@@ -122,20 +116,16 @@ app.use('/campaigns', campaignRoutes);
 app.use('/', rewardRoutes);
 app.use('/', authRoutes);
 
-// catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// error handler
 app.use((err, req, res, next) => {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
